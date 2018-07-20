@@ -86,7 +86,17 @@ public class CSVResultSet extends DummyResultSet {
 	public String getString(int columnIndex) throws SQLException {
 		String value = getValueForColumnIndex(columnIndex, String.class);
 
+		if (value.isEmpty()) {
+			return null;
+		}
 		return value;
+	}
+
+	@Override
+	public double getDouble(int columnIndex) throws SQLException {
+		String value = getValueForColumnIndex(columnIndex, Double.class);
+
+		return Double.parseDouble(value);
 	}
 
 	@Override
@@ -126,7 +136,18 @@ public class CSVResultSet extends DummyResultSet {
 	@Override
 	public String getString(String columnLabel) throws SQLException {
 		String string = getValueForColumnLabel(columnLabel, String.class);
+
+        if (string.isEmpty()) {
+            return null;
+        }
 		return string;
+	}
+
+	@Override
+	public double getDouble(String columnLabel) throws SQLException {
+		String string = getValueForColumnLabel(columnLabel, Double.class);
+
+		return Double.parseDouble(string);
 	}
 
 	@Override
