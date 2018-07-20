@@ -88,31 +88,31 @@ public final class CsvStatement extends StatementAdapter {
 
 	private ResultSet createResultSet(String tableName) {
 		// Does a text file for the dummy table exist?
-		File resource = tableResources.get(tableName.toLowerCase());
-		if (resource == null) {
+//		File resource = tableResources.get(tableName.toLowerCase());
+//		if (resource == null) {
 			// Try to load a file from the ./tables/ directory
-			CodeSource src = CsvStatement.class.getProtectionDomain().getCodeSource();
+//			CodeSource src = CsvStatement.class.getProtectionDomain().getCodeSource();
 
-			String path = src.getLocation().getPath();
-			path = path.substring(0, path.lastIndexOf("/"));
-			try {
-				URL url = CsvStatement.class.getResource("/tables/" + tableName.toLowerCase() + ".csv");
-				if (url == null) {
-					LOGGER.info("No table definition found for '{}', using DummyResultSet.", tableName);
-					return new DummyResultSet();
-				} else {
-					resource = new File(url.toURI());
-				}
-			} catch (URISyntaxException e) {
-				LOGGER.error("Error creating URI for table file: {}", e.getMessage(), e);
-			}
-		}
+//			String path = src.getLocation().getPath();
+//			path = path.substring(0, path.lastIndexOf("/"));
+//			try {
+//				URL url = CsvStatement.class.getResource("/tables/" + tableName.toLowerCase() + ".csv");
+//				if (url == null) {
+//					LOGGER.info("No table definition found for '{}', using DummyResultSet.", tableName);
+//					return new DummyResultSet();
+//				} else {
+//					resource = new File(url.toURI());
+//				}
+//			} catch (URISyntaxException e) {
+//				LOGGER.error("Error creating URI for table file: {}", e.getMessage(), e);
+//			}
+//		}
 
-		FileInputStream dummyTableDataStream = null;
+		InputStream dummyTableDataStream = null;
 		try {
-			dummyTableDataStream = new FileInputStream(resource);
+			dummyTableDataStream = CsvStatement.class.getResourceAsStream("/tables/" + tableName.toLowerCase() + ".csv");
 			return createGenericResultSet(tableName, dummyTableDataStream);
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			LOGGER.info("No table definition found for '{}', using DummyResultSet.", tableName);
 		} finally {
 			if (dummyTableDataStream != null) {
