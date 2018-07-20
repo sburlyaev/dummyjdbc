@@ -244,7 +244,15 @@ public class DummyResultSet implements ResultSet {
 
 	@Override
 	public int findColumn(String columnLabel) throws SQLException {
-		return 0;
+        ResultSetMetaData metaData = getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        for (int i = 1; i <= columnCount; i++) {
+            if (metaData.getColumnName(i).equalsIgnoreCase(columnLabel)) {
+                return i;
+            }
+        }
+        return 1;
 	}
 
 	@Override
